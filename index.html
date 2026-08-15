@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
 :root{
 --primary:#0072bc;--secondary:#00a8ff;--accent:#2ed573;
 --dark:#2f3542;--light:#f4f7f6;--shadow:0 10px 30px #0001;
---transition:.3s ease}
+}
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{
 min-height:100vh;display:flex;flex-direction:column;
@@ -27,7 +27,7 @@ gap:8px;font-size:1.5rem;font-weight:bold;color:var(--primary)}
 .nav-links{
 display:flex;gap:1.5rem;list-style:none}
 .nav-btn,.btn-cta,.btn-link{
-display:inline-block;transition:var(--transition)}
+display:inline-block}
 .nav-btn{
 padding:.6rem 1.2rem;border-radius:25px;font-weight:bold}
 .nav-btn:hover,.btn-link:hover{
@@ -36,13 +36,11 @@ main{
 flex:1;max-width:1200px;width:100%;
 margin:2rem auto;padding:0 1.5rem}
 .page-section{
-display:none;animation:fade .4s}
+display:none}
 .page-section:target{display:block}
 #accueil{display:block}
 :target~#accueil{display:none}
-@keyframes fade{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1}}
+
 .hero{
 padding:5rem 2rem;text-align:center;color:#fff;
 border-radius:20px;
@@ -53,7 +51,7 @@ box-shadow:var(--shadow)}
 .btn-cta{
 padding:.9rem 2.5rem;border-radius:30px;
 background:var(--accent);color:#fff;font-weight:bold}
-.btn-cta:hover{transform:translateY(-3px)}
+
 .info-card,.card{
 background:#fff;box-shadow:var(--shadow)}
 .info-card{
@@ -72,8 +70,8 @@ gap:2rem}
 .card{
 display:flex;flex-direction:column;align-items:center;
 padding:2.5rem 1.5rem;border-radius:15px;
-text-align:center;transition:var(--transition)}
-.card:hover{transform:translateY(-8px)}
+text-align:center}
+
 .card-icon{
 justify-content:center;width:70px;height:70px;
 margin-bottom:1.5rem;border-radius:50%;
