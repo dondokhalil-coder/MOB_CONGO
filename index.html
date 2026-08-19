@@ -1,157 +1,287 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOB_CONGO</title>
-    <style>
-:root{
---primary:#0072bc;--secondary:#00a8ff;--accent:#2ed573;
---dark:#2f3542;--light:#f4f7f6;--shadow:0 10px 30px #0001;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOB_CONGO</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;}
 body{
-min-height:100vh;display:flex;flex-direction:column;
-background:var(--light);color:var(--dark)}
-a{text-decoration:none;color:inherit}
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:#f4f7f6;
+    color:#2f3542;}
+a{
+    text-decoration:none;
+    color:inherit;}
 header{
-position:sticky;top:0;z-index:1000;
-background:#fff;box-shadow:var(--shadow)}
-.navbar,.logo,.card-icon{
-display:flex;align-items:center}
-.navbar{
-justify-content:space-between;
-max-width:1200px;margin:auto;padding:1rem 2rem}
+    background:#fff;
+    box-shadow:0 10px 30px #0001;}
+.menu,.logo,.icone{
+    display:flex;
+    align-items:center;}
+.menu{
+    justify-content:space-between;
+    max-width:1200px;
+    margin:auto;
+    padding:16px 32px;}
 .logo{
-gap:8px;font-size:1.5rem;font-weight:bold;color:var(--primary)}
-.nav-links{
-display:flex;gap:1.5rem;list-style:none}
-.nav-btn,.btn-cta,.btn-link{
-display:inline-block}
-.nav-btn{
-padding:.6rem 1.2rem;border-radius:25px;font-weight:bold}
-.nav-btn:hover,.btn-link:hover{
-background:var(--secondary);color:#fff}
+    gap:8px;
+    font-size:24px;
+    font-weight:bold;
+    color:#0072bc;}
+.liens{
+    display:flex;
+    gap:24px;
+    list-style:none;}
+.bouton,.action,.lien{
+    display:inline-block;}
+.bouton{
+    padding:10px 20px;
+    border-radius:25px;
+    font-weight:bold;}
+.bouton:hover,.lien:hover{
+    background:#00a8ff;
+    color:#fff;}
 main{
-flex:1;max-width:1200px;width:100%;
-margin:2rem auto;padding:0 1.5rem}
-.page-section{
-display:none}
-.page-section:target{display:block}
-#accueil{display:block}
-:target~#accueil{display:none}
+    flex:1;
+    max-width:1200px;
+    width:100%;
+    margin:32px auto;
+    padding:0 24px;}
+.page{display:none;}
+.page:target{display:block;}
+#accueil{display:block;}
+:target~#accueil{display:none;}
+.defile{
+    background:#2f3542;
+    color:#fff;
+    padding:8px 0;
+    font-size:15px;}
+.accueil{
+    padding:80px 32px;
+    text-align:center;
+    color:#fff;
+    border-radius:20px;
+    background:linear-gradient(135deg,#0072bc,#00a8ff);
+    box-shadow:0 10px 30px #0001;}
+.accueil h1{
+    font-size:45px;
+    margin-bottom:16px;
+    padding:10px;
+    border:4px solid #fff;
+    display:inline-block;}
+.accueil p{
+    max-width:600px;
+    margin:16px auto 32px;
+    font-size:19px;}
+.action{
+    padding:14px 40px;
+    border-radius:30px;
+    background:#2ed573;
+    color:#fff;
+    font-weight:bold;}
+.info,.carte{
+    background:#fff;
+    box-shadow:0 10px 30px #0001;}
+.info{
+    padding:48px 32px;
+    border-radius:20px;
+    text-align:center;}
+.info h2,.titre{
+    color:#0072bc;
+    font-size:32px;}
+.info p{
+    max-width:800px;
+    margin:24px auto;
+    line-height:1.8;
+    color:#555;}
+.definitions{
+    text-align:left;
+    max-width:600px;
+    margin:32px auto;
+    background:#f4f7f6;
+    padding:24px;
+    border-radius:10px;}
 
-.hero{
-padding:5rem 2rem;text-align:center;color:#fff;
-border-radius:20px;
-background:linear-gradient(135deg,var(--primary),var(--secondary));
-box-shadow:var(--shadow)}
-.hero h1{font-size:2.8rem;margin-bottom:1rem}
-.hero p{max-width:600px;margin:0 auto 2rem;font-size:1.2rem}
-.btn-cta{
-padding:.9rem 2.5rem;border-radius:30px;
-background:var(--accent);color:#fff;font-weight:bold}
-
-.info-card,.card{
-background:#fff;box-shadow:var(--shadow)}
-.info-card{
-padding:3rem 2rem;border-radius:20px;text-align:center}
-.info-card h2,.services-title{
-color:var(--primary);font-size:2rem}
-.info-card p{
-max-width:800px;margin:1.5rem auto;
-line-height:1.8;color:#555}
-.services-title{
-text-align:center;margin-bottom:2rem}
-.cards-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:2rem}
-.card{
-display:flex;flex-direction:column;align-items:center;
-padding:2.5rem 1.5rem;border-radius:15px;
-text-align:center}
-
-.card-icon{
-justify-content:center;width:70px;height:70px;
-margin-bottom:1.5rem;border-radius:50%;
-background:#e6f2ff;font-size:2rem}
-.card h3{margin-bottom:1rem}
-.card-text{
-margin-bottom:1.5rem;
-color:#666;
-font-size:.9rem}
-.btn-link{
-margin-top:auto;padding:.6rem 1.5rem;
-border-radius:20px;background:var(--primary);color:#fff}
+.definitions dt{
+    font-weight:bold;
+    color:#0072bc;
+    margin-top:13px;}
+.definitions dd{
+    margin-left:16px;
+    color:#666;}
+.titre{
+    text-align:center;
+    margin-bottom:32px;}
+.cartes{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:32px;}
+.carte{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:40px 24px;
+    border-radius:15px;
+    text-align:center;}
+.icone{
+    justify-content:center;
+    width:70px;
+    height:70px;
+    margin-bottom:24px;
+    border-radius:50%;
+    background:#e6f2ff;
+    font-size:32px;}
+.carte h3{margin-bottom:16px;}
+.texte{
+    margin-bottom:24px;
+    color:#666;
+    font-size:14px;}
+.lien{
+    margin-top:auto;
+    padding:10px 24px;
+    border-radius:20px;
+    background:#0072bc;
+    color:#fff;}
 footer{
-margin-top:auto;padding:2rem;text-align:center;
-background:var(--dark);color:#fff}
-footer p{opacity:.8;font-size:.9rem}
-footer a{color:var(--secondary)}
+    margin-top:auto;
+    padding:32px;
+    text-align:center;
+    background:#2f3542;
+    color:#fff;}
+footer p{
+    opacity: 0.7;;
+    font-size:14px;}
+footer a{color:#00a8ff;}
 @media(max-width:768px){
-.navbar{flex-direction:column;gap:1rem}
-.hero h1{font-size:2rem}}
+    .menu{
+        flex-direction:column;
+        gap:16px;}
+    .accueil h1{font-size:32px;}}
 </style>
 </head>
 <body>
+<div class="defile">
+    <marquee>
+        Bienvenue sur MOB_CONGO - Urgence médicale ?
+        Retrouvez les centres de santé de garde et pharmacies à proximité 24h/24.
+    </marquee>
+</div>
 <header>
-<nav class="navbar">
-<div class="logo">🌍 <span>MOB_CONGO</span></div>
-<ul class="nav-links">
-<li><a href="#accueil" class="nav-btn">ACCUEIL</a></li>
-<li><a href="#info" class="nav-btn">INFO</a></li>
-<li><a href="#services" class="nav-btn">SERVICES</a></li>
-</ul>
+<nav class="menu">
+    <div class="logo">
+        🌍 <span>MOB_CONGO</span>
+    </div>
+    <ul class="liens">
+        <li><a href="#accueil" class="bouton">ACCUEIL</a></li>
+        <li><a href="#info" class="bouton">INFO</a></li>
+        <li><a href="#services" class="bouton">SERVICES</a></li>
+    </ul>
 </nav>
 </header>
 <main>
-<section id="accueil" class="page-section">
-<div class="hero">
-<h1>BIENVENUE SUR MOB_CONGO</h1>
-<p>Votre plateforme intelligente pour localiser rapidement les meilleurs établissements de santé à proximité.</p>
-<a href="#services" class="btn-cta">Découvrir notre application</a>
-</div>
+<section id="accueil" class="page">
+    <div class="accueil">
+        <h1>BIENVENUE SUR MOB_CONGO</h1>
+        <p>
+            Votre plateforme intelligente pour localiser rapidement
+            les meilleurs établissements de santé à proximité.
+        </p>
+        <a href="#services" class="action">
+            Découvrir notre application
+        </a>
+    </div>
 </section>
-<section id="info" class="page-section">
-<div class="info-card">
-<h2>VISITER NOTRE SITE</h2>
-<p>
-<strong>MOB_CONGO</strong> est une plateforme qui permet de découvrir et localiser les services de santé autour de vous.<br><br>
-Trouvez facilement des hôpitaux, cliniques, pharmacies et autres établissements grâce à des informations précises.
-</p>
-<a href="#services" class="btn-cta">Rechercher un service</a>
-</div>
+<section id="info" class="page">
+    <div class="info">
+        <h2>VISITER NOTRE SITE</h2>
+        <p>
+            <strong>MOB_CONGO</strong> est une plateforme qui permet
+            de découvrir et localiser les services de santé autour de vous.
+            <br><br>
+            Trouvez facilement des hôpitaux, cliniques, pharmacies
+            et autres établissements grâce à des informations précises.
+        </p>
+        <dl class="definitions">
+            <dt>Hôpital</dt>
+            <dd>
+                Établissement public ou privé assurant la prise en charge
+                des urgences et des soins complexes.
+            </dd>
+            <dt>Clinique</dt>
+            <dd>
+                Structure médicale privée offrant des consultations
+                spécialisées et des interventions chirurgicales.
+            </dd>
+            <dt>Pharmacie de garde</dt>
+            <dd>
+                Officine ouverte en dehors des heures habituelles
+                (nuit, dimanches et jours fériés).
+            </dd>
+        </dl>
+        <a href="#services" class="action">Rechercher un service</a>
+    </div>
 </section>
-<section id="services" class="page-section">
-<h2 class="services-title">Recherche de services de santé</h2>
-<div class="cards-grid">
-<div class="card">
-<div class="card-icon">🏥</div>
-<h3>Hôpitaux</h3>
-<p class="card-text">Trouvez les hôpitaux et centres d'urgence près de chez vous.</p>
-<a href="//www.google.com/maps/search/hôpitaux+près+de+chez+moi" class="btn-link">Rechercher</a>
-</div>
-<div class="card">
-<div class="card-icon">👨‍⚕️</div>
-<h3>Cliniques</h3>
-<p class="card-text">Localisez les cliniques spécialisées et cabinets médicaux.</p>
-<a href="//www.google.com/maps/search/cliniques+près+de+chez+moi" class="btn-link">Rechercher</a>
-</div>
-<div class="card">
-<div class="card-icon">💊</div>
-<h3>Pharmacies</h3>
-<p class="card-text">Accédez aux pharmacies de garde et points de vente.</p>
-<a href="//www.google.com/maps/search/pharmacies+près+de+chez+moi" class="btn-link">Rechercher</a>
-</div>
-</div>
+<section id="services" class="page">
+    <h2 class="titre">Recherche de services de santé</h2>
+    <div class="cartes">
+        <div class="carte">
+            <div class="icone">🏥</div>
+            <h3>Hôpitaux</h3>
+            <p class="texte">
+                Trouvez les hôpitaux et centres d'urgence
+                près de chez vous.</p>
+            <a
+                href="https://www.google.com/maps/search/hôpitaux+près+de+chez+moi"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lien">
+                Rechercher
+            </a>
+        </div>
+        <div class="carte">
+            <div class="icone">👨‍⚕️</div>
+            <h3>Cliniques</h3>
+            <p class="texte">
+                Localisez les cliniques spécialisées
+                et cabinets médicaux.</p>
+            <a
+                href="https://www.google.com/maps/search/cliniques+près+de+chez+moi"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lien">
+                Rechercher
+            </a>
+        </div>
+        <div class="carte">
+            <div class="icone">💊</div>
+            <h3>Pharmacies</h3>
+            <p class="texte">
+                Accédez aux pharmacies de garde
+                et points de vente.</p>
+            <a
+                href="https://www.google.com/maps/search/pharmacies+près+de+chez+moi"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lien">Rechercher</a>
+        </div>
+    </div>
 </section>
 </main>
 <footer>
-<p>&copy; 2026 MOB_CONGO. Tous droits réservés.</p>
-<p>By <strong>DONDO KHALIL</strong> | 
-<a href="mailto:dondokhalil@gmail.com">Nous contacter</a> |
-<a href="https://www.instagram.com/mr_odn_01" target="_blank" rel="noopener noreferrer">Suivre</a></p>
+    <p>&copy; 2026 MOB_CONGO. Tous droits réservés.</p>
+    <p>
+        By <strong>DONDO KHALIL</strong> |
+        <a href="mailto:dondokhalil@gmail.com">Nous contacter</a> |
+        <a href="https://www.instagram.com/mr_odn_01"
+            target="_blank"rel="noopener noreferrer">Suivre</a>
+    </p>
 </footer>
 </body>
 </html>
