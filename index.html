@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MOB_CONGO</title>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOB_CONGO</title>
+
+    <!-- Inclusion CSS de Leaflet (Carte) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
 *{
     margin:0;
     padding:0;
@@ -22,10 +26,10 @@ a{
 header{
     background:#fff;
     box-shadow:0 10px 30px #0001;}
-.menu,.logo,.icone{
+.navbar,.logo,.card-icon{
     display:flex;
     align-items:center;}
-.menu{
+.navbar{
     justify-content:space-between;
     max-width:1200px;
     margin:auto;
@@ -35,17 +39,19 @@ header{
     font-size:24px;
     font-weight:bold;
     color:#0072bc;}
-.liens{
+.nav-links{
     display:flex;
     gap:24px;
     list-style:none;}
-.bouton,.action,.lien{
-    display:inline-block;}
-.bouton{
+.nav-btn,.btn-cta,.btn-link{
+    display:inline-block;
+    cursor:pointer;
+    border:none;}
+.nav-btn{
     padding:10px 20px;
     border-radius:25px;
     font-weight:bold;}
-.bouton:hover,.lien:hover{
+.nav-btn:hover,.btn-link:hover{
     background:#00a8ff;
     color:#fff;}
 main{
@@ -54,8 +60,8 @@ main{
     width:100%;
     margin:32px auto;
     padding:0 24px;}
-.page{display:none;}
-.page:target{display:block;}
+.page-section{display:none;}
+.page-section:target{display:block;}
 #accueil{display:block;}
 :target~#accueil{display:none;}
 .defile{
@@ -63,74 +69,75 @@ main{
     color:#fff;
     padding:8px 0;
     font-size:15px;}
-.accueil{
+.hero{
     padding:80px 32px;
     text-align:center;
     color:#fff;
     border-radius:20px;
     background:linear-gradient(135deg,#0072bc,#00a8ff);
     box-shadow:0 10px 30px #0001;}
-.accueil h1{
+.hero h1{
     font-size:45px;
     margin-bottom:16px;
     padding:10px;
-    border:4px solid #fff;
+    border-style:solid;
+    border-width:4px;
+    border-color:#2ed573 #00a8ff #fff #0072bc;
     display:inline-block;}
-.accueil p{
+.hero p{
     max-width:600px;
     margin:16px auto 32px;
     font-size:19px;}
-.action{
+.btn-cta{
     padding:14px 40px;
     border-radius:30px;
     background:#2ed573;
     color:#fff;
     font-weight:bold;}
-.info,.carte{
+.info-card,.card{
     background:#fff;
     box-shadow:0 10px 30px #0001;}
-.info{
+.info-card{
     padding:48px 32px;
     border-radius:20px;
     text-align:center;}
-.info h2,.titre{
+.info-card h2,.services-title{
     color:#0072bc;
     font-size:32px;}
-.info p{
+.info-card p{
     max-width:800px;
     margin:24px auto;
     line-height:1.8;
     color:#555;}
-.definitions{
+.definition-list{
     text-align:left;
     max-width:600px;
     margin:32px auto;
     background:#f4f7f6;
     padding:24px;
     border-radius:10px;}
-
-.definitions dt{
+.definition-list dt{
     font-weight:bold;
     color:#0072bc;
     margin-top:13px;}
-.definitions dd{
+.definition-list dd{
     margin-left:16px;
     color:#666;}
-.titre{
+.services-title{
     text-align:center;
     margin-bottom:32px;}
-.cartes{
+.cards-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:32px;}
-.carte{
+.card{
     display:flex;
     flex-direction:column;
     align-items:center;
     padding:40px 24px;
     border-radius:15px;
     text-align:center;}
-.icone{
+.card-icon{
     justify-content:center;
     width:70px;
     height:70px;
@@ -138,12 +145,38 @@ main{
     border-radius:50%;
     background:#e6f2ff;
     font-size:32px;}
-.carte h3{margin-bottom:16px;}
-.texte{
+.card h3{margin-bottom:16px;}
+.card-text{
     margin-bottom:24px;
     color:#666;
     font-size:14px;}
-.lien{
+
+/* Zone d'affichage de la Carte */
+.map-container {
+    margin-top: 32px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px #0001;
+    display: none;
+}
+.map-container h3 {
+    color: #0072bc;
+    margin-bottom: 8px;
+    text-align: center;
+}
+.map-status {
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: bold;
+    color: #555;
+}
+#map {
+    height: 400px;
+    width: 100%;
+    border-radius: 10px;
+}
+.btn-link{
     margin-top:auto;
     padding:10px 24px;
     border-radius:20px;
@@ -156,132 +189,209 @@ footer{
     background:#2f3542;
     color:#fff;}
 footer p{
-    opacity: 0.7;;
+    opacity:0.7;
     font-size:14px;}
 footer a{color:#00a8ff;}
 @media(max-width:768px){
-    .menu{
+    .navbar{
         flex-direction:column;
         gap:16px;}
-    .accueil h1{font-size:32px;}}
+    .hero h1{font-size:32px;}}
 </style>
 </head>
 <body>
-<div class="defile">
-    <marquee>
-        Bienvenue sur MOB_CONGO - Urgence médicale ?
-        Retrouvez les centres de santé de garde et pharmacies à proximité 24h/24.
-    </marquee>
-</div>
+
 <header>
-<nav class="menu">
-    <div class="logo">
-        🌍 <span>MOB_CONGO</span>
-    </div>
-    <ul class="liens">
-        <li><a href="#accueil" class="bouton">ACCUEIL</a></li>
-        <li><a href="#info" class="bouton">INFO</a></li>
-        <li><a href="#services" class="bouton">SERVICES</a></li>
-    </ul>
+<div class="defile">
+    <marquee>Bienvenue sur MOB_CONGO ! Localisez vos services de santé à proximité.</marquee>
+</div>
+<nav class="navbar">
+<div class="logo">🌍 <span>MOB_CONGO</span></div>
+<ul class="nav-links">
+<li><a href="#accueil" class="nav-btn">ACCUEIL</a></li>
+<li><a href="#info" class="nav-btn">INFO</a></li>
+<li><a href="#services" class="nav-btn">SERVICES</a></li>
+</ul>
 </nav>
 </header>
 <main>
-<section id="accueil" class="page">
-    <div class="accueil">
-        <h1>BIENVENUE SUR MOB_CONGO</h1>
-        <p>
-            Votre plateforme intelligente pour localiser rapidement
-            les meilleurs établissements de santé à proximité.
-        </p>
-        <a href="#services" class="action">
-            Découvrir notre application
-        </a>
-    </div>
+<section id="accueil" class="page-section">
+<div class="hero">
+<h1>BIENVENUE SUR MOB_CONGO</h1>
+<p>Votre plateforme intelligente pour localiser rapidement les meilleurs établissements de santé à proximité.</p>
+<a href="#services" class="btn-cta">Découvrir notre application</a>
+</div>
 </section>
-<section id="info" class="page">
-    <div class="info">
-        <h2>VISITER NOTRE SITE</h2>
-        <p>
-            <strong>MOB_CONGO</strong> est une plateforme qui permet
-            de découvrir et localiser les services de santé autour de vous.
-            <br><br>
-            Trouvez facilement des hôpitaux, cliniques, pharmacies
-            et autres établissements grâce à des informations précises.
-        </p>
-        <dl class="definitions">
-            <dt>Hôpital</dt>
-            <dd>
-                Établissement public ou privé assurant la prise en charge
-                des urgences et des soins complexes.
-            </dd>
-            <dt>Clinique</dt>
-            <dd>
-                Structure médicale privée offrant des consultations
-                spécialisées et des interventions chirurgicales.
-            </dd>
-            <dt>Pharmacie de garde</dt>
-            <dd>
-                Officine ouverte en dehors des heures habituelles
-                (nuit, dimanches et jours fériés).
-            </dd>
-        </dl>
-        <a href="#services" class="action">Rechercher un service</a>
-    </div>
+
+<section id="info" class="page-section">
+<div class="info-card">
+<h2>VISITER NOTRE SITE</h2>
+<p>
+<strong>MOB_CONGO</strong> est une plateforme qui permet de découvrir et localiser les services de santé autour de vous.<br><br>
+Trouvez facilement des hôpitaux, cliniques, pharmacies et autres établissements grâce à des informations précises.
+</p>
+
+<dl class="definition-list">
+    <dt>Hôpital</dt>
+    <dd>Établissement public ou privé assurant la prise en charge des urgences et des soins complexes.</dd>
+    
+    <dt>Clinique</dt>
+    <dd>Structure médicale privée offrant des consultations spécialisées et des interventions chirurgicales.</dd>
+    
+    <dt>Pharmacie de garde</dt>
+    <dd>Officine ouverte en dehors des heures habituelles (nuit, dimanches et jours fériés).</dd>
+</dl>
+
+<a href="#services" class="btn-cta">Rechercher un service</a>
+</div>
 </section>
-<section id="services" class="page">
-    <h2 class="titre">Recherche de services de santé</h2>
-    <div class="cartes">
-        <div class="carte">
-            <div class="icone">🏥</div>
-            <h3>Hôpitaux</h3>
-            <p class="texte">
-                Trouvez les hôpitaux et centres d'urgence
-                près de chez vous.</p>
-            <a
-                href="https://www.google.com/maps/search/hôpitaux+près+de+chez+moi"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="lien">
-                Rechercher
-            </a>
-        </div>
-        <div class="carte">
-            <div class="icone">👨‍⚕️</div>
-            <h3>Cliniques</h3>
-            <p class="texte">
-                Localisez les cliniques spécialisées
-                et cabinets médicaux.</p>
-            <a
-                href="https://www.google.com/maps/search/cliniques+près+de+chez+moi"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="lien">
-                Rechercher
-            </a>
-        </div>
-        <div class="carte">
-            <div class="icone">💊</div>
-            <h3>Pharmacies</h3>
-            <p class="texte">
-                Accédez aux pharmacies de garde
-                et points de vente.</p>
-            <a
-                href="https://www.google.com/maps/search/pharmacies+près+de+chez+moi"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="lien">Rechercher</a>
-        </div>
-    </div>
+
+<section id="services" class="page-section">
+<h2 class="services-title">Recherche de services de santé</h2>
+<div class="cards-grid">
+<div class="card">
+<div class="card-icon">🏥</div>
+<h3>Hôpitaux</h3>
+<p class="card-text">Trouvez les hôpitaux et centres d'urgence près de chez vous.</p>
+<button onclick="afficherSurCarte('hospital')" class="btn-link">Afficher sur la carte</button>
+</div>
+<div class="card">
+<div class="card-icon">👨‍⚕️</div>
+<h3>Cliniques</h3>
+<p class="card-text">Localisez les cliniques spécialisées et cabinets médicaux.</p>
+<button onclick="afficherSurCarte('clinic')" class="btn-link">Afficher sur la carte</button>
+</div>
+<div class="card">
+<div class="card-icon">💊</div>
+<h3>Pharmacies</h3>
+<p class="card-text">Accédez aux pharmacies de garde et points de vente.</p>
+<button onclick="afficherSurCarte('pharmacy')" class="btn-link">Afficher sur la carte</button>
+</div>
+</div>
+
+<!-- Emplacement de la Carte Interactive -->
+<div id="map-box" class="map-container">
+    <h3 id="map-title">Carte des établissements</h3>
+    <p id="map-status" class="map-status">Recherche de votre position...</p>
+    <div id="map"></div>
+</div>
+
 </section>
 </main>
+
 <footer>
-    <p>&copy; 2026 MOB_CONGO. Tous droits réservés.</p>
-    <p>
-        By <strong>DONDO KHALIL</strong> |
-        <a href="mailto:dondokhalil@gmail.com">Nous contacter</a> |
-        <a href="https://www.instagram.com/mr_odn_01"
-            target="_blank"rel="noopener noreferrer">Suivre</a>
-    </p>
+<p>&copy; 2026 MOB_CONGO. Tous droits réservés.</p>
+<p style="margin-top: 8px;">By <strong>DONDO KHALIL</strong> | 
+<a href="mailto:dondokhalil@gmail.com">Nous contacter</a> |
+<a href="https://www.instagram.com/mr_odn_01" target="_blank" rel="noopener noreferrer">Suivre</a></p>
 </footer>
+
+<!-- JavaScript de Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+let map;
+let markersGroup;
+
+function afficherSurCarte(typeService) {
+  const mapBox = document.getElementById('map-box');
+  const status = document.getElementById('map-status');
+  mapBox.style.display = 'block';
+
+  // Déplacement fluide jusqu'à la carte
+  mapBox.scrollIntoView({ behavior: 'smooth' });
+
+  status.innerText = "Obtention de la position GPS...";
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        status.innerText = `Recherche des lieux ("${typeService}") dans un rayon de 2 km...`;
+
+        // Initialisation de la carte si elle n'existe pas encore
+        if (!map) {
+          map = L.map('map').setView([lat, lon], 13);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+          }).addTo(map);
+          markersGroup = L.layerGroup().addTo(map);
+        } else {
+          map.setView([lat, lon], 13);
+          markersGroup.clearLayers();
+        }
+
+        // Marqueur personnalisé pour la position de l'utilisateur (ex: icône verte/distincte)
+        const userIcon = L.divIcon({
+          className: 'custom-user-marker',
+          html: '<div style="background-color: #2ed573; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+
+        // Marqueur pour les services de santé (ex: icône bleue/distincte)
+        const serviceIcon = L.divIcon({
+          className: 'custom-service-marker',
+          html: '<div style="background-color: #0072bc; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>',
+          iconSize: [14, 14],
+          iconAnchor: [7, 7]
+        });
+
+        // Ajout du marqueur utilisateur avec sa couleur spécifique
+        L.marker([lat, lon], { icon: userIcon })
+          .addTo(markersGroup)
+          .bindPopup('<b>Vous êtes ici</b>')
+          .openPopup();
+
+        // Requête à l'API Overpass (OpenStreetMap) pour récupérer les lieux proches
+        const query = `
+          [out:json];
+          (
+            node["amenity"="${typeService}"](around:2000, ${lat}, ${lon});
+            way["amenity"="${typeService}"](around:2000, ${lat}, ${lon});
+          );
+          out center;
+        `;
+        const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+        fetch(url)
+          .then(res => res.json())
+          .then(data => {
+            const elements = data.elements;
+            if (elements.length === 0) {
+              status.innerText = "Aucun établissement trouvé à proximité immédiate.";
+              return;
+            }
+
+            status.innerText = `${elements.length} établissement(s) trouvé(s) proche(s) de vous.`;
+
+            // Ajout des marqueurs pour chaque lieu trouvé avec la couleur des services
+            elements.forEach(place => {
+              const pLat = place.lat || (place.center && place.center.lat);
+              const pLon = place.lon || (place.center && place.center.lon);
+              const name = place.tags.name || "Établissement de santé";
+
+              if (pLat && pLon) {
+                L.marker([pLat, pLon], { icon: serviceIcon })
+                  .addTo(markersGroup)
+                  .bindPopup(`<b>${name}</b><br>Type: ${typeService}`);
+              }
+            });
+          })
+          .catch(() => {
+            status.innerText = "Erreur lors de la récupération des données de carte.";
+          });
+      },
+      () => {
+        status.innerText = "Impossible d'accéder à votre position GPS.";
+      }
+    );
+  } else {
+    status.innerText = "La géolocalisation n'est pas supportée.";
+  }
+}
+</script>
 </body>
 </html>
