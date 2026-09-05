@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOB_CONGO</title>
-
-    <!-- Inclusion CSS de Leaflet (Carte) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <style>
 *{
     margin:0;
@@ -150,8 +148,6 @@ main{
     margin-bottom:24px;
     color:#666;
     font-size:14px;}
-
-/* Zone d'affichage de la Carte */
 .map-container {
     margin-top: 32px;
     padding: 24px;
@@ -245,7 +241,6 @@ Trouvez facilement des hôpitaux, cliniques, pharmacies et autres établissement
 <a href="#services" class="btn-cta">Rechercher un service</a>
 </div>
 </section>
-
 <section id="services" class="page-section">
 <h2 class="services-title">Recherche de services de santé</h2>
 <div class="cards-grid">
@@ -268,14 +263,11 @@ Trouvez facilement des hôpitaux, cliniques, pharmacies et autres établissement
 <button onclick="afficherSurCarte('pharmacy')" class="btn-link">Afficher sur la carte</button>
 </div>
 </div>
-
-<!-- Emplacement de la Carte Interactive -->
 <div id="map-box" class="map-container">
     <h3 id="map-title">Carte des établissements</h3>
     <p id="map-status" class="map-status">Recherche de votre position...</p>
     <div id="map"></div>
 </div>
-
 </section>
 </main>
 
@@ -285,24 +277,19 @@ Trouvez facilement des hôpitaux, cliniques, pharmacies et autres établissement
 <a href="mailto:dondokhalil@gmail.com">Nous contacter</a> |
 <a href="https://www.instagram.com/mr_odn_01" target="_blank" rel="noopener noreferrer">Suivre</a></p>
 </footer>
-
-<!-- JavaScript de Leaflet -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script>
 let map;
 let markersGroup;
+let routingControl = null;
 
 function afficherSurCarte(typeService) {
   const mapBox = document.getElementById('map-box');
   const status = document.getElementById('map-status');
   mapBox.style.display = 'block';
-
-  // Déplacement fluide jusqu'à la carte
   mapBox.scrollIntoView({ behavior: 'smooth' });
-
   status.innerText = "Obtention de la position GPS...";
-
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -310,8 +297,6 @@ function afficherSurCarte(typeService) {
         const lon = position.coords.longitude;
 
         status.innerText = `Recherche des lieux ("${typeService}") dans un rayon de 2 km...`;
-
-        // Initialisation de la carte si elle n'existe pas encore
         if (!map) {
           map = L.map('map').setView([lat, lon], 13);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -321,31 +306,23 @@ function afficherSurCarte(typeService) {
         } else {
           map.setView([lat, lon], 13);
           markersGroup.clearLayers();
-        }
-
-        // Marqueur personnalisé pour la position de l'utilisateur (ex: icône verte/distincte)
+          if (routingControl) {
+            map.removeControl(routingControl);
+            routingControl = null;}}
         const userIcon = L.divIcon({
           className: 'custom-user-marker',
           html: '<div style="background-color: #2ed573; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5);"></div>',
           iconSize: [16, 16],
-          iconAnchor: [8, 8]
-        });
-
-        // Marqueur pour les services de santé (ex: icône bleue/distincte)
+          iconAnchor: [8, 8]});
         const serviceIcon = L.divIcon({
           className: 'custom-service-marker',
           html: '<div style="background-color: #0072bc; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);"></div>',
           iconSize: [14, 14],
-          iconAnchor: [7, 7]
-        });
-
-        // Ajout du marqueur utilisateur avec sa couleur spécifique
+          iconAnchor: [7, 7]});
         L.marker([lat, lon], { icon: userIcon })
           .addTo(markersGroup)
           .bindPopup('<b>Vous êtes ici</b>')
           .openPopup();
-
-        // Requête à l'API Overpass (OpenStreetMap) pour récupérer les lieux proches
         const query = `
           [out:json];
           (
@@ -355,28 +332,28 @@ function afficherSurCarte(typeService) {
           out center;
         `;
         const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
-
         fetch(url)
           .then(res => res.json())
           .then(data => {
             const elements = data.elements;
             if (elements.length === 0) {
               status.innerText = "Aucun établissement trouvé à proximité immédiate.";
-              return;
-            }
-
-            status.innerText = `${elements.length} établissement(s) trouvé(s) proche(s) de vous.`;
-
-            // Ajout des marqueurs pour chaque lieu trouvé avec la couleur des services
+              return;}
+            status.innerText = `${elements.length} établissement(s) trouvé(s). Cliquez sur l'un d'eux pour voir l'itinéraire.`;
             elements.forEach(place => {
               const pLat = place.lat || (place.center && place.center.lat);
               const pLon = place.lon || (place.center && place.center.lon);
               const name = place.tags.name || "Établissement de santé";
-
               if (pLat && pLon) {
-                L.marker([pLat, pLon], { icon: serviceIcon })
-                  .addTo(markersGroup)
-                  .bindPopup(`<b>${name}</b><br>Type: ${typeService}`);
+                const marker = L.marker([pLat, pLon], { icon: serviceIcon }).addTo(markersGroup);
+                const popupContent = `
+                  <b>${name}</b><br>Type: ${typeService}<br><br>
+                  <button onclick="tracerItineraire(${lat}, ${lon}, ${pLat}, ${pLon})" 
+                          style="background:#0072bc;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-weight:bold;">
+                    Y aller (Itinéraire)
+                  </button>
+                `;
+                marker.bindPopup(popupContent);
               }
             });
           })
@@ -385,13 +362,21 @@ function afficherSurCarte(typeService) {
           });
       },
       () => {
-        status.innerText = "Impossible d'accéder à votre position GPS.";
-      }
-    );
+        status.innerText = "Impossible d'accéder à votre position GPS.";});
   } else {
-    status.innerText = "La géolocalisation n'est pas supportée.";
-  }
-}
+    status.innerText = "La géolocalisation n'est pas supportée.";}}
+function tracerItineraire(startLat, startLon, destLat, destLon) {
+  if (routingControl) {
+    map.removeControl(routingControl); }
+  routingControl = L.Routing.control({
+    waypoints: [
+      L.latLng(startLat, startLon),
+      L.latLng(destLat, destLon)],
+    routeWhileDragging: false,
+    language: 'fr',
+    createMarker: function() { return null; } 
+  }).addTo(map);
+  document.getElementById('map-status').innerText = "Itinéraire tracé avec succès !";}
 </script>
 </body>
 </html>
